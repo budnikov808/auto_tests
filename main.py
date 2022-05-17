@@ -1,37 +1,23 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
-import time
-import math
 
-def calc(x):
-    return str(math.log(abs(12*math.sin(int(x)))))
+from tests.test_1 import test_1
+from tests.test_2 import test_2
+from tests.test_3 import test_3
+from tests.test_4 import test_4
+from tests.test_5 import test_5
+from tests.test_6 import test_6
+from tests.test_7 import test_7
+from utils import exec_test
 
-try:
-    browser = webdriver.Chrome()
-    browser.get("http://suninjuly.github.io/explicit_wait2.html")
 
-    WebDriverWait(browser, 12).until(
-        EC.text_to_be_present_in_element((By.ID, "price"), "$100")
-    )
-    button = browser.find_element(By.ID, "book")
-    button.click()
+browser = webdriver.Firefox()
 
-    x_element = browser.find_element(By.ID, "input_value")
-    x = x_element.text
-    y = calc(x)
+exec_test(test_1, browser, '28.8778')
+exec_test(test_2, browser, '29.0123')
+exec_test(test_3, browser, '28.9233')
+exec_test(test_4, browser, '28.9246')
+exec_test(test_5, browser, '28.9255')
+exec_test(test_6, browser, '28.9255')
+exec_test(test_7, browser, '28.9690')
 
-    input = browser.find_element(By.ID, "answer")
-    input.send_keys(y)
-
-    button = browser.find_element(By.ID, "solve")
-    button.click()
-
-finally:
-    # успеваем скопировать код за 30 секунд
-    time.sleep(30)
-    # закрываем браузер после всех манипуляций
-    browser.quit()
-
-# не забываем оставить пустую строку в конце файла
+browser.quit()
