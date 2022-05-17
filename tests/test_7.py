@@ -1,36 +1,25 @@
-from selenium import webdriver
-import time
-import math
+from selenium.webdriver.common.by import By
 
-def calc(x):
-    return str(math.log(abs(12*math.sin(int(x)))))
+from utils import calc_math_task, custom_assert, get_num_from_alert_text, get_alert_text
 
-try:
-    link = "http://suninjuly.github.io/redirect_accept.html"
-    browser = webdriver.Chrome()
-    browser.get(link)
 
-    button = browser.find_element_by_css_selector("body > form > div > div > button")
+def test_7(browser, answer):
+    browser.get("http://suninjuly.github.io/redirect_accept.html")
+
+    button = browser.find_element(By.CSS_SELECTOR, "body > form > div > div > button")
     button.click()
 
-    first_window = browser.window_handles[0]
     new_window = browser.window_handles[1]
     browser.switch_to.window(new_window)
 
-    x_element = browser.find_element_by_id("input_value")
+    x_element = browser.find_element(By.ID, "input_value")
     x = x_element.text
-    y = calc(x)
+    y = calc_math_task(x)
 
-    input = browser.find_element_by_id("answer")
+    input = browser.find_element(By.ID, "answer")
     input.send_keys(y)
 
-    button = browser.find_element_by_css_selector("body > form > div > div > button")
+    button = browser.find_element(By.CSS_SELECTOR, "body > form > div > div > button")
     button.click()
 
-finally:
-    # успеваем скопировать код за 30 секунд
-    time.sleep(30)
-    # закрываем браузер после всех манипуляций
-    browser.quit()
-
-# не забываем оставить пустую строку в конце файла
+    custom_assert(get_num_from_alert_text(get_alert_text(browser)) == answer, __file__)
